@@ -54,7 +54,7 @@ const StudentGrades = () => {
     if (field === "grade" && updatedRow.courseId) {
       axios
         .put(
-          `http://localhost:8080/courses/update/${updatedRow.courseId}`,
+          'http://localhost:8080/courses/update/${updatedRow.courseId}',
           updatedRow
         )
         .then((response) => {
@@ -66,7 +66,7 @@ const StudentGrades = () => {
     }
   };
 
-  // Function to calculate average grade
+  // Function to calculate average grade and redirect to another page
   const calculateAverage = () => {
     const validGrades = rows
       .map((row) => (row.grade.trim() ? parseFloat(row.grade) : NaN))
@@ -80,6 +80,9 @@ const StudentGrades = () => {
     const average =
       validGrades.reduce((sum, grade) => sum + grade, 0) / validGrades.length;
     alert(`Средний балл: ${average.toFixed(2)}`);
+
+    // Перенаправление на другой URL
+    window.location.href = "http://localhost:8080/barChart";
   };
 
   // Function to create a new course
@@ -101,7 +104,7 @@ const StudentGrades = () => {
       });
   };
 
-  return (
+return (
     <div className="container">
       <div id="rows">
         {rows.map((row, index) => (

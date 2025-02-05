@@ -68,20 +68,33 @@ const CompetencyManager = () => {
     }
   };
 
-  const handleAssignCompetency = async (competencyId) => {
-    if (!selectedCourse) return alert("Выберите курс для назначения!");
-
+  const handleAssignCompetency = async (competencyId, type) => {
+    if (!selectedCourse) {
+      return alert("Выберите курс для назначения!");
+    }
+  
+    const endpoint =
+      type === "unique"
+        ? "/course-unique-competences/create"
+        : "/course-shared-competences/create";
+  
+    const data =
+      type === "unique"
+        ? { courseId: selectedCourse, uniqueCompetenceId: competencyId }
+        : { courseId: selectedCourse, sharedCompetenceId: competencyId };
+  
     try {
-      await axios.post("http://localhost:8080/assign-competency", {
-        competencyId,
-        courseId: selectedCourse,
+      await axios.post(`http://localhost:8080${endpoint}`, data, {
+        headers: { "Content-Type": "application/json" },
       });
-      alert("Компетенция назначена курсу!");
+  
+      alert("Компетенция успешно назначена!");
     } catch (error) {
-      console.error("Ошибка при назначении:", error.message);
-      alert("Ошибка при назначении: " + error.message);
+      console.error("Ошибка при назначении:", error.response?.data || error.message);
+      alert(`Ошибка: ${JSON.stringify(error.response?.data)}`);
     }
   };
+  
 
   return (
     <div className="competency-manager">
@@ -129,7 +142,7 @@ const CompetencyManager = () => {
                 ))}
               </select>
               <button
-                onClick={() => handleAssignCompetency(comp.id)}
+                onClick={() => handleAssignCompetency(comp.id, "unique")}
                 className="btn btn-assign"
               >
                 Назначить
@@ -163,7 +176,7 @@ const CompetencyManager = () => {
                 ))}
               </select>
               <button
-                onClick={() => handleAssignCompetency(comp.id)}
+                onClick={() => handleAssignCompetency(comp.id, "shared")}
                 className="btn btn-assign"
               >
                 Назначить
