@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import axios from 'axios';
 import { Chart } from 'chart.js/auto';
 import StudentGrades from './StudentGrades'; // Import the StudentGrades component
+import CompetencyManagement from './CompetencyManagement';
 
 // CompetencyGradesChart component
 function CompetencyGradesChart() {
@@ -83,6 +84,11 @@ function Navigation() {
             Student Grades
           </Link>
         </li>
+        <li>
+          <Link to="/competency-management" style={{ textDecoration: 'none', color: 'blue' }}>
+            Competency Management
+          </Link>
+        </li>
       </ul>
     </nav>
   );
@@ -98,11 +104,9 @@ function App() {
 
         {/* Routes */}
         <Routes>
-          {/* Route for Competency Grades Chart */}
-          <Route path="/competency-grades" element={<CompetencyGradesChart />} />
-
           {/* Route for Student Grades */}
           <Route path="/student-grades" element={<StudentGrades />} />
+          <Route path="/competency-management" element={<CompetencyManagement />} />
 
           {/* Default route (redirects to Competency Grades Chart) */}
           <Route path="/" element={<CompetencyGradesChart />} />
