@@ -72,29 +72,34 @@ const CompetencyManager = () => {
     if (!selectedCourse) {
       return alert("Выберите курс для назначения!");
     }
-  
+
     const endpoint =
       type === "unique"
         ? "/course-unique-competences/create"
         : "/course-shared-competences/create";
-  
+
     const data =
       type === "unique"
-        ? { courseId: selectedCourse, uniqueCompetenceId: competencyId }
-        : { courseId: selectedCourse, sharedCompetenceId: competencyId };
-  
+        ? { 
+            courseId: parseInt(selectedCourse, 10), // Ensure courseId is an integer
+            uniqueCompetenceId: parseInt(competencyId, 10) // Ensure competencyId is an integer
+          }
+        : { 
+            courseId: parseInt(selectedCourse, 10), // Ensure courseId is an integer
+            sharedCompetenceId: parseInt(competencyId, 10) // Ensure competencyId is an integer
+          };
+
     try {
       await axios.post(`http://localhost:8080${endpoint}`, data, {
         headers: { "Content-Type": "application/json" },
       });
-  
+
       alert("Компетенция успешно назначена!");
     } catch (error) {
       console.error("Ошибка при назначении:", error.response?.data || error.message);
       alert(`Ошибка: ${JSON.stringify(error.response?.data)}`);
     }
   };
-  
 
   return (
     <div className="competency-manager">
