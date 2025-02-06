@@ -8,8 +8,9 @@ function CompetencyManagement() {
   const [courses, setCourses] = useState([]);
   const [selectedCourseId, setSelectedCourseId] = useState('');
   const [newCompetence, setNewCompetence] = useState({ name: '', type: 'unique' });
+  const [courseAssignments, setCourseAssignments] = useState({ unique: {}, shared: {} });
 
-  // Fetch all unique and shared competences and courses
+  // Fetch all unique and shared competences, courses, and their assignments
   useEffect(() => {
     fetchCompetences();
     fetchCourses();
@@ -21,6 +22,22 @@ function CompetencyManagement() {
       const sharedResponse = await axios.get('http://localhost:8080/shared-competences');
       setUniqueCompetences(uniqueResponse.data);
       setSharedCompetences(sharedResponse.data);
+
+      // Fetch course assignments for unique competences
+      const uniqueAssignments = {};
+      for (const competence of uniqueResponse.data) {
+        const assignmentResponse = await axios.get(`http://localhost:8080/course-unique-competences?uniqueCompetenceId=${competence.id}`);
+        uniqueAssignments[competence.id] = assignmentResponse.data;
+      }
+
+      // Fetch course assignments for shared competences
+      const sharedAssignments = {};
+      for (const competence of sharedResponse.data) {
+        const assignmentResponse = await axios.get(`http://localhost:8080/course-shared-competences?sharedCompetenceId=${competence.id}`);
+        sharedAssignments[competence.id] = assignmentResponse.data;
+      }
+
+      setCourseAssignments({ unique: uniqueAssignments, shared: sharedAssignments });
     } catch (error) {
       console.error('Error fetching competences:', error);
     }
@@ -81,9 +98,10 @@ function CompetencyManagement() {
 
     try {
       const endpoint = type === 'unique'
-        ? `http://localhost:8080/courses/${selectedCourseId}/assign-unique-competence/${competenceId}`
-        : `http://localhost:8080/courses/${selectedCourseId}/assign-shared-competence/${competenceId}`;
+        ? `http://localhost:8080/course-unique-competences/create?courseId=${selectedCourseId}&uniqueCompetenceId=${competenceId}`
+        : `http://localhost:8080/course-shared-competences/create?courseId=${selectedCourseId}&sharedCompetenceId=${competenceId}`;
       await axios.post(endpoint);
+      fetchCompetences(); // Refresh the list to show the new assignment
       alert('Competence assigned to course successfully!');
     } catch (error) {
       console.error('Error assigning competence:', error);
@@ -152,6 +170,14 @@ function CompetencyManagement() {
               >
                 Assign to Course
               </button>
+              <div>
+                <strong>Assigned to Courses:</strong>
+                {courseAssignments.unique[competence.id]?.map((assignment) => (
+                  <div key={assignment.courseId}>
+                    {courses.find(course => course.id === assignment.courseId)?.name}
+                  </div>
+                ))}
+              </div>
             </li>
           ))}
         </ul>
@@ -176,6 +202,14 @@ function CompetencyManagement() {
               >
                 Assign to Course
               </button>
+              <div>
+                <strong>Assigned to Courses:</strong>
+                {courseAssignments.shared[competence.id]?.map((assignment) => (
+                  <div key={assignment.courseId}>
+                    {courses.find(course => course.id === assignment.courseId)?.name}
+                  </div>
+                ))}
+              </div>
             </li>
           ))}
         </ul>
