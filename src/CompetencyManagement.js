@@ -9,12 +9,14 @@ const CompetencyManager = () => {
   const [newCompetency, setNewCompetency] = useState("");
   const [selectedCourse, setSelectedCourse] = useState("");
   const [competencyType, setCompetencyType] = useState("unique");
+  const [assignedCompetencies, setAssignedCompetencies] = useState({}); // { courseId: [competencies] }
 
   useEffect(() => {
     fetchCompetencies();
     fetchCourses();
   }, []);
 
+  // Fetch all competencies (unique and shared)
   const fetchCompetencies = async () => {
     try {
       const uniqueRes = await axios.get("http://localhost:8080/unique-competences");
@@ -26,15 +28,33 @@ const CompetencyManager = () => {
     }
   };
 
+  // Fetch all courses
   const fetchCourses = async () => {
     try {
       const res = await axios.get("http://localhost:8080/courses");
       setCourses(res.data);
+      // Fetch assigned competencies for each course
+      res.data.forEach((course) => fetchAssignedCompetencies(course.id));
     } catch (error) {
       console.error("Ошибка при загрузке курсов:", error.message);
     }
   };
 
+  // Fetch competencies assigned to a specific course
+  const fetchAssignedCompetencies = async (courseId) => {
+    try {
+      const uniqueRes = await axios.get(`http://localhost:8080/course-unique-competences/course/${courseId}`);
+      const sharedRes = await axios.get(`http://localhost:8080/course-shared-competences/course/${courseId}`);
+      setAssignedCompetencies((prev) => ({
+        ...prev,
+        [courseId]: [...uniqueRes.data, ...sharedRes.data],
+      }));
+    } catch (error) {
+      console.error("Ошибка при загрузке назначенных компетенций:", error.message);
+    }
+  };
+
+  // Add a new competency
   const handleAddCompetency = async () => {
     if (!newCompetency) return alert("Введите название компетенции!");
 
@@ -54,6 +74,7 @@ const CompetencyManager = () => {
     }
   };
 
+  // Delete a competency
   const handleDeleteCompetency = async (id, type) => {
     const endpoint = type === "unique" 
       ? `/unique-competences/delete/${id}` 
@@ -68,6 +89,7 @@ const CompetencyManager = () => {
     }
   };
 
+  // Assign a competency to a course
   const handleAssignCompetency = async (competencyId, type) => {
     if (!selectedCourse) {
       return alert("Выберите курс для назначения!");
@@ -95,6 +117,7 @@ const CompetencyManager = () => {
       });
 
       alert("Компетенция успешно назначена!");
+      fetchAssignedCompetencies(selectedCourse); // Refresh assigned competencies for the selected course
     } catch (error) {
       console.error("Ошибка при назначении:", error.response?.data || error.message);
       alert(`Ошибка: ${JSON.stringify(error.response?.data)}`);
@@ -193,6 +216,23 @@ const CompetencyManager = () => {
                 ❌
               </button>
             </div>
+          </div>
+        ))}
+      </div>
+
+      {/* New Section: Courses with Assigned Competencies */}
+      <div className="competency-section">
+        <h3 className="section-title">Курсы с назначенными компетенциями</h3>
+        {courses.map((course) => (
+          <div key={course.id} className="course-item">
+            <h4>{course.name}</h4>
+            <ul>
+              {assignedCompetencies[course.id]?.map((comp) => (
+                <li key={comp.id}>
+                  {comp.name} ({comp.type === "unique" ? "Уникальная" : "Общая"})
+                </li>
+              ))}
+            </ul>
           </div>
         ))}
       </div>
