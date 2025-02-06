@@ -1,243 +1,187 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import "./CompetencyManagement.css";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import "./CompetencyManagement.css"
 
-const CompetencyManager = () => {
-  const [uniqueCompetencies, setUniqueCompetencies] = useState([]);
-  const [sharedCompetencies, setSharedCompetencies] = useState([]);
+function CompetencyManagement() {
+  const [uniqueCompetences, setUniqueCompetences] = useState([]);
+  const [sharedCompetences, setSharedCompetences] = useState([]);
   const [courses, setCourses] = useState([]);
-  const [newCompetency, setNewCompetency] = useState("");
-  const [selectedCourse, setSelectedCourse] = useState("");
-  const [competencyType, setCompetencyType] = useState("unique");
-  const [assignedCompetencies, setAssignedCompetencies] = useState({}); // { courseId: [competencies] }
+  const [selectedCourseId, setSelectedCourseId] = useState('');
+  const [newCompetence, setNewCompetence] = useState({ name: '', type: 'unique' });
 
+  // Fetch all unique and shared competences and courses
   useEffect(() => {
-    fetchCompetencies();
+    fetchCompetences();
     fetchCourses();
   }, []);
 
-  // Fetch all competencies (unique and shared)
-  const fetchCompetencies = async () => {
+  const fetchCompetences = async () => {
     try {
-      const uniqueRes = await axios.get("http://localhost:8080/unique-competences");
-      const sharedRes = await axios.get("http://localhost:8080/shared-competences");
-      setUniqueCompetencies(uniqueRes.data);
-      setSharedCompetencies(sharedRes.data);
+      const uniqueResponse = await axios.get('http://localhost:8080/unique-competences');
+      const sharedResponse = await axios.get('http://localhost:8080/shared-competences');
+      setUniqueCompetences(uniqueResponse.data);
+      setSharedCompetences(sharedResponse.data);
     } catch (error) {
-      console.error("Ошибка при загрузке компетенций:", error.message);
+      console.error('Error fetching competences:', error);
     }
   };
 
-  // Fetch all courses
   const fetchCourses = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/courses");
-      setCourses(res.data);
-      // Fetch assigned competencies for each course
-      res.data.forEach((course) => fetchAssignedCompetencies(course.id));
+      const response = await axios.get('http://localhost:8080/courses');
+      setCourses(response.data);
     } catch (error) {
-      console.error("Ошибка при загрузке курсов:", error.message);
+      console.error('Error fetching courses:', error);
     }
   };
 
-  // Fetch competencies assigned to a specific course
-  const fetchAssignedCompetencies = async (courseId) => {
+  // Handle form input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewCompetence({ ...newCompetence, [name]: value });
+  };
+
+  // Add a new competence (unique or shared)
+  const addCompetence = async () => {
     try {
-      const uniqueRes = await axios.get(`http://localhost:8080/course-unique-competences/course/${courseId}`);
-      const sharedRes = await axios.get(`http://localhost:8080/course-shared-competences/course/${courseId}`);
-      setAssignedCompetencies((prev) => ({
-        ...prev,
-        [courseId]: [...uniqueRes.data, ...sharedRes.data],
-      }));
+      const endpoint = newCompetence.type === 'unique'
+        ? 'http://localhost:8080/unique-competences/create'
+        : 'http://localhost:8080/shared-competences/create';
+      const response = await axios.post(endpoint, { name: newCompetence.name });
+      fetchCompetences(); // Refresh the list
+      setNewCompetence({ name: '', type: 'unique' }); // Reset form
+      alert('Competence added successfully!');
     } catch (error) {
-      console.error("Ошибка при загрузке назначенных компетенций:", error.message);
+      console.error('Error adding competence:', error);
+      alert('Failed to add competence.');
     }
   };
 
-  // Add a new competency
-  const handleAddCompetency = async () => {
-    if (!newCompetency) return alert("Введите название компетенции!");
-
-    const endpoint = competencyType === "unique" 
-      ? "/unique-competences/create" 
-      : "/shared-competences/create";
-
+  // Delete a competence (unique or shared)
+  const deleteCompetence = async (id, type) => {
     try {
-      await axios.post(`http://localhost:8080${endpoint}`, { name: newCompetency }, {
-        headers: { "Content-Type": "application/json" }
-      });
-      setNewCompetency("");
-      fetchCompetencies();
+      const endpoint = type === 'unique'
+        ? `http://localhost:8080/unique-competences/delete/${id}`
+        : `http://localhost:8080/shared-competences/delete/${id}`;
+      await axios.delete(endpoint);
+      fetchCompetences(); // Refresh the list
+      alert('Competence deleted successfully!');
     } catch (error) {
-      console.error("Ошибка при добавлении:", error.message);
-      alert("Ошибка при добавлении: " + error.message);
+      console.error('Error deleting competence:', error);
+      alert('Failed to delete competence.');
     }
   };
 
-  // Delete a competency
-  const handleDeleteCompetency = async (id, type) => {
-    const endpoint = type === "unique" 
-      ? `/unique-competences/delete/${id}` 
-      : `/shared-competences/delete/${id}`;
-
-    try {
-      await axios.delete(`http://localhost:8080${endpoint}`);
-      fetchCompetencies();
-    } catch (error) {
-      console.error("Ошибка при удалении:", error.message);
-      alert("Ошибка при удалении: " + error.message);
-    }
-  };
-
-  // Assign a competency to a course
-  const handleAssignCompetency = async (competencyId, type) => {
-    if (!selectedCourse) {
-      return alert("Выберите курс для назначения!");
+  // Assign a competence to a course
+  const assignCompetenceToCourse = async (competenceId, type) => {
+    if (!selectedCourseId) {
+      alert('Please select a course first.');
+      return;
     }
 
-    const endpoint =
-      type === "unique"
-        ? "/course-unique-competences/create"
-        : "/course-shared-competences/create";
-
-    const data =
-      type === "unique"
-        ? { 
-            courseId: parseInt(selectedCourse, 10), // Ensure courseId is an integer
-            uniqueCompetenceId: parseInt(competencyId, 10) // Ensure competencyId is an integer
-          }
-        : { 
-            courseId: parseInt(selectedCourse, 10), // Ensure courseId is an integer
-            sharedCompetenceId: parseInt(competencyId, 10) // Ensure competencyId is an integer
-          };
-
     try {
-      await axios.post(`http://localhost:8080${endpoint}`, data, {
-        headers: { "Content-Type": "application/json" },
-      });
-
-      alert("Компетенция успешно назначена!");
-      fetchAssignedCompetencies(selectedCourse); // Refresh assigned competencies for the selected course
+      const endpoint = type === 'unique'
+        ? `http://localhost:8080/courses/${selectedCourseId}/assign-unique-competence/${competenceId}`
+        : `http://localhost:8080/courses/${selectedCourseId}/assign-shared-competence/${competenceId}`;
+      await axios.post(endpoint);
+      alert('Competence assigned to course successfully!');
     } catch (error) {
-      console.error("Ошибка при назначении:", error.response?.data || error.message);
-      alert(`Ошибка: ${JSON.stringify(error.response?.data)}`);
+      console.error('Error assigning competence:', error);
+      alert('Failed to assign competence to course.');
     }
   };
 
   return (
-    <div className="competency-manager">
-      <h2 className="title">Управление Компетенциями</h2>
+    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+      <h1>Competency Management</h1>
 
-      <div className="competency-section">
-        <h3 className="section-title">Добавить Компетенцию</h3>
-        <div className="input-group">
-          <input
-            type="text"
-            placeholder="Введите компетенцию"
-            value={newCompetency}
-            onChange={(e) => setNewCompetency(e.target.value)}
-            className="input-field"
-          />
-          <select
-            value={competencyType}
-            onChange={(e) => setCompetencyType(e.target.value)}
-            className="dropdown"
-          >
-            <option value="unique">Уникальная</option>
-            <option value="shared">Общая</option>
-          </select>
-          <button onClick={handleAddCompetency} className="btn btn-add">
-            Добавить
-          </button>
-        </div>
+      {/* Add New Competence Form */}
+      <div style={{ marginBottom: '20px' }}>
+        <h2>Add New Competence</h2>
+        <input
+          type="text"
+          name="name"
+          placeholder="Competence Name"
+          value={newCompetence.name}
+          onChange={handleInputChange}
+          style={{ marginRight: '10px', padding: '5px' }}
+        />
+        <select
+          name="type"
+          value={newCompetence.type}
+          onChange={handleInputChange}
+          style={{ marginRight: '10px', padding: '5px' }}
+        >
+          <option value="unique">Unique Competence</option>
+          <option value="shared">Shared Competence</option>
+        </select>
+        <button onClick={addCompetence} style={{ padding: '5px 10px' }}>Add Competence</button>
       </div>
 
-      <div className="competency-section">
-        <h3 className="section-title">Уникальные Компетенции</h3>
-        {uniqueCompetencies.map((comp) => (
-          <div key={comp.id} className="competency-item">
-            <span>{comp.name}</span>
-            <div className="actions">
-              <select
-                onChange={(e) => setSelectedCourse(e.target.value)}
-                className="dropdown"
-              >
-                <option value="">Выберите курс</option>
-                {courses.map((course) => (
-                  <option key={course.id} value={course.id}>
-                    {course.name}
-                  </option>
-                ))}
-              </select>
-              <button
-                onClick={() => handleAssignCompetency(comp.id, "unique")}
-                className="btn btn-assign"
-              >
-                Назначить
-              </button>
-              <button
-                onClick={() => handleDeleteCompetency(comp.id, "unique")}
-                className="btn btn-delete"
-              >
-                ❌
-              </button>
-            </div>
-          </div>
-        ))}
+      {/* Assign Competence to Course */}
+      <div style={{ marginBottom: '20px' }}>
+        <h2>Assign Competence to Course</h2>
+        <select
+          value={selectedCourseId}
+          onChange={(e) => setSelectedCourseId(e.target.value)}
+          style={{ marginRight: '10px', padding: '5px' }}
+        >
+          <option value="">Select a Course</option>
+          {courses.map((course) => (
+            <option key={course.id} value={course.id}>{course.name}</option>
+          ))}
+        </select>
       </div>
 
-      <div className="competency-section">
-        <h3 className="section-title">Общие Компетенции</h3>
-        {sharedCompetencies.map((comp) => (
-          <div key={comp.id} className="competency-item">
-            <span>{comp.name}</span>
-            <div className="actions">
-              <select
-                onChange={(e) => setSelectedCourse(e.target.value)}
-                className="dropdown"
-              >
-                <option value="">Выберите курс</option>
-                {courses.map((course) => (
-                  <option key={course.id} value={course.id}>
-                    {course.name}
-                  </option>
-                ))}
-              </select>
+      {/* List of Unique Competences */}
+      <div style={{ marginBottom: '20px' }}>
+        <h2>Unique Competences</h2>
+        <ul>
+          {uniqueCompetences.map((competence) => (
+            <li key={competence.id} style={{ marginBottom: '10px' }}>
+              {competence.name}
               <button
-                onClick={() => handleAssignCompetency(comp.id, "shared")}
-                className="btn btn-assign"
+                onClick={() => deleteCompetence(competence.id, 'unique')}
+                style={{ marginLeft: '10px', padding: '2px 5px' }}
               >
-                Назначить
+                Delete
               </button>
               <button
-                onClick={() => handleDeleteCompetency(comp.id, "shared")}
-                className="btn btn-delete"
+                onClick={() => assignCompetenceToCourse(competence.id, 'unique')}
+                style={{ marginLeft: '10px', padding: '2px 5px' }}
               >
-                ❌
+                Assign to Course
               </button>
-            </div>
-          </div>
-        ))}
+            </li>
+          ))}
+        </ul>
       </div>
 
-      {/* New Section: Courses with Assigned Competencies */}
-      <div className="competency-section">
-        <h3 className="section-title">Курсы с назначенными компетенциями</h3>
-        {courses.map((course) => (
-          <div key={course.id} className="course-item">
-            <h4>{course.name}</h4>
-            <ul>
-              {assignedCompetencies[course.id]?.map((comp) => (
-                <li key={comp.id}>
-                  {comp.name} ({comp.type === "unique" ? "Уникальная" : "Общая"})
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+      {/* List of Shared Competences */}
+      <div>
+        <h2>Shared Competences</h2>
+        <ul>
+          {sharedCompetences.map((competence) => (
+            <li key={competence.id} style={{ marginBottom: '10px' }}>
+              {competence.name}
+              <button
+                onClick={() => deleteCompetence(competence.id, 'shared')}
+                style={{ marginLeft: '10px', padding: '2px 5px' }}
+              >
+                Delete
+              </button>
+              <button
+                onClick={() => assignCompetenceToCourse(competence.id, 'shared')}
+                style={{ marginLeft: '10px', padding: '2px 5px' }}
+              >
+                Assign to Course
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
-};
+}
 
-export default CompetencyManager;
+export default CompetencyManagement;

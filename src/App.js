@@ -75,11 +75,6 @@ function Navigation() {
     <nav style={{ marginBottom: '20px' }}>
       <ul style={{ listStyle: 'none', padding: 0, display: 'flex', gap: '20px' }}>
         <li>
-          <Link to="/competency-grades" style={{ textDecoration: 'none', color: 'blue' }}>
-            Competency Grades Chart
-          </Link>
-        </li>
-        <li>
           <Link to="/student-grades" style={{ textDecoration: 'none', color: 'blue' }}>
             Student Grades
           </Link>
