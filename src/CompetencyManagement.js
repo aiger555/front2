@@ -109,6 +109,11 @@ function CompetencyManagement() {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token'); // Remove the token
+    window.location.href = '/login'; // Redirect to login page
+  };
+  
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
       <h1>Competency Management</h1>
@@ -214,6 +219,10 @@ function CompetencyManagement() {
           ))}
         </ul>
       </div>
+      <div>
+      <h1>Welcome to the App!</h1>
+      <button onClick={handleLogout} style={{ padding: '5px 10px' }}>Logout</button>
+    </div>
     </div>
   );
 }

@@ -30,7 +30,7 @@ const StudentGrades = () => {
     const updatedRows = rows.filter((row) => row.id !== id);
     setRows(updatedRows);
 
-    // Perform DELETE request to remove the grade entry
+    // Perform DELETE request to remove the grade entry (optional)
     axios
       .delete(`http://localhost:8080/courses/delete/${id}`)
       .then((response) => {
@@ -41,7 +41,7 @@ const StudentGrades = () => {
       });
   };
 
-  // Function to handle input changes
+  // Function to handle input changes (course and grade)
   const handleChange = (index, field, value) => {
     const updatedRows = rows.map((row, i) =>
       i === index ? { ...row, [field]: value } : row
@@ -50,11 +50,11 @@ const StudentGrades = () => {
 
     const updatedRow = updatedRows[index];
 
-    // Perform PUT request to update the grade
+    // Perform PUT request to update the grade if the grade or course changes
     if (field === "grade" && updatedRow.courseId) {
       axios
         .put(
-          'http://localhost:8080/courses/update/${updatedRow.courseId}',
+          `http://localhost:8080/courses/update/${updatedRow.courseId}`,
           updatedRow
         )
         .then((response) => {
@@ -73,15 +73,15 @@ const StudentGrades = () => {
       .filter((grade) => !isNaN(grade));
 
     if (validGrades.length === 0) {
-      alert("Введите оценки для расчета!");
+      alert("Please enter grades to calculate the average!");
       return;
     }
 
     const average =
       validGrades.reduce((sum, grade) => sum + grade, 0) / validGrades.length;
-    alert(`Средний балл: ${average.toFixed(2)}`);
+    alert(`Average grade: ${average.toFixed(2)}`);
 
-    // Перенаправление на другой URL
+    // Redirect to another page (for example, bar chart page)
     window.location.href = "http://localhost:8080/barChart";
   };
 
@@ -97,14 +97,26 @@ const StudentGrades = () => {
       .post("http://localhost:8080/courses/create", newCourse)
       .then((response) => {
         console.log("New course created:", response.data);
-        setCourses([...courses, response.data]); // Add the new course to the list
+
+        // Add the new course to the courses state to update the dropdown
+        setCourses((prevCourses) => [...prevCourses, response.data]);
+
+        // Show success message
+        alert("Course created successfully!");
       })
       .catch((error) => {
         console.error("Error creating new course:", error);
+        alert("Failed to create course. Please try again.");
       });
   };
 
-return (
+  // Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // Remove the token
+    window.location.href = "/login"; // Redirect to login page
+  };
+
+  return (
     <div className="container">
       <div id="rows">
         {rows.map((row, index) => (
@@ -124,7 +136,7 @@ return (
             </select>
             <input
               type="number"
-              placeholder="grade"
+              placeholder="Grade"
               min="0"
               max="100"
               value={row.grade}
@@ -139,12 +151,17 @@ return (
           </div>
         ))}
       </div>
+      
       <button className="calculate-btn" onClick={calculateAverage}>
-        count
+        Calculate Average
       </button>
       <button className="create-course-btn" onClick={createCourse}>
         Create New Course
       </button>
+
+      <div>
+        <button onClick={handleLogout} style={{ padding: '5px 10px' }}>Logout</button>
+      </div>
     </div>
   );
 };
