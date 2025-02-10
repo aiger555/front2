@@ -8,6 +8,7 @@ const StudentGrades = () => {
   const [rows, setRows] = useState([{ id: uuidv4(), courseId: "", grade: "" }]);
   const [courses, setCourses] = useState([]); // Store the list of courses from the backend
   const [userInfo, setUserInfo] = useState({ email: "", id: "" }); // Store user information
+  const [selectedCourseId, setSelectedCourseId] = useState(""); // Track the selected course for deletion
   const navigate = useNavigate(); // Initialize useNavigate
 
   // Fetch courses and user information when the component mounts
@@ -160,6 +161,45 @@ const StudentGrades = () => {
       });
   };
 
+  // Function to delete a course along with its grades and assigned competencies
+  const deleteCourse = async () => {
+    if (!selectedCourseId) {
+      alert("Please select a course to delete.");
+      return;
+    }
+
+    const token = localStorage.getItem("token"); // Get the JWT token
+    if (!token) {
+      alert("You are not authorized. Please log in.");
+      window.location.href = "/login"; // Redirect to login if no token is found
+      return;
+    }
+
+    try {
+      // Perform DELETE request to delete the course
+      await axios.delete(`http://localhost:8080/courses/delete/${selectedCourseId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the request headers
+        },
+      });
+
+      // Remove the deleted course from the courses state
+      setCourses((prevCourses) =>
+        prevCourses.filter((course) => course.id !== selectedCourseId)
+      );
+
+      // Remove rows associated with the deleted course
+      setRows((prevRows) =>
+        prevRows.filter((row) => row.courseId !== selectedCourseId)
+      );
+
+      alert("Course deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting course:", error);
+      alert("Failed to delete course. Please try again.");
+    }
+  };
+
   // Handle logout
   const handleLogout = () => {
     localStorage.removeItem("token"); // Remove the token
@@ -220,6 +260,28 @@ const StudentGrades = () => {
       <button className="create-course-btn" onClick={createCourse}>
         Create New Course
       </button>
+
+      {/* Dropdown to select a course for deletion */}
+      <div style={{ margin: "10px" }}>
+        <select
+          value={selectedCourseId}
+          onChange={(e) => setSelectedCourseId(e.target.value)}
+          style={{ marginRight: "10px", padding: "5px" }}
+        >
+          <option value="">Select a Course to Delete</option>
+          {courses.map((course) => (
+            <option key={course.id} value={course.id}>
+              {course.name}
+            </option>
+          ))}
+        </select>
+        <button
+          onClick={deleteCourse}
+          style={{ padding: "5px 10px", backgroundColor: "red", color: "white" }}
+        >
+          Delete Course
+        </button>
+      </div>
 
       {/* Button to redirect to Competency Management page */}
       <button
