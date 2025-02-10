@@ -9,13 +9,30 @@ const StudentGrades = () => {
 
   // Fetch courses from the backend when the component mounts
   useEffect(() => {
+    const token = localStorage.getItem("token"); // Get the JWT token from localStorage
+    if (!token) {
+      alert("You are not authorized. Please log in.");
+      window.location.href = "/login"; // Redirect to login if no token is found
+      return;
+    }
+
+    // Fetch courses with the JWT token in the headers
     axios
-      .get("http://localhost:8080/courses")
+      .get("http://localhost:8080/courses", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the request headers
+        },
+      })
       .then((response) => {
         setCourses(response.data); // Set the list of courses
       })
       .catch((error) => {
         console.error("Error fetching courses:", error);
+        if (error.response && error.response.status === 401) {
+          alert("Session expired. Please log in again.");
+          localStorage.removeItem("token"); // Remove the token
+          window.location.href = "/login"; // Redirect to login
+        }
       });
   }, []);
 
@@ -31,8 +48,13 @@ const StudentGrades = () => {
     setRows(updatedRows);
 
     // Perform DELETE request to remove the grade entry (optional)
+    const token = localStorage.getItem("token"); // Get the JWT token
     axios
-      .delete(`http://localhost:8080/courses/delete/${id}`)
+      .delete(`http://localhost:8080/courses/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the request headers
+        },
+      })
       .then((response) => {
         console.log("Grade entry deleted:", response.data);
       })
@@ -52,10 +74,16 @@ const StudentGrades = () => {
 
     // Perform PUT request to update the grade if the grade or course changes
     if (field === "grade" && updatedRow.courseId) {
+      const token = localStorage.getItem("token"); // Get the JWT token
       axios
         .put(
           `http://localhost:8080/courses/update/${updatedRow.courseId}`,
-          updatedRow
+          updatedRow,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Include the token in the request headers
+            },
+          }
         )
         .then((response) => {
           console.log("Grade updated:", response.data);
@@ -93,8 +121,13 @@ const StudentGrades = () => {
     const newCourse = { name: courseName, grade: 0 }; // Default grade is 0
 
     // Perform POST request to create a new course
+    const token = localStorage.getItem("token"); // Get the JWT token
     axios
-      .post("http://localhost:8080/courses/create", newCourse)
+      .post("http://localhost:8080/courses/create", newCourse, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the request headers
+        },
+      })
       .then((response) => {
         console.log("New course created:", response.data);
 
@@ -151,7 +184,7 @@ const StudentGrades = () => {
           </div>
         ))}
       </div>
-      
+
       <button className="calculate-btn" onClick={calculateAverage}>
         Calculate Average
       </button>
@@ -160,7 +193,9 @@ const StudentGrades = () => {
       </button>
 
       <div>
-        <button onClick={handleLogout} style={{ padding: '5px 10px' }}>Logout</button>
+        <button onClick={handleLogout} style={{ padding: "5px 10px" }}>
+          Logout
+        </button>
       </div>
     </div>
   );
