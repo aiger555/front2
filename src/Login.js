@@ -15,14 +15,19 @@ function Login() {
         email,
         password,
       });
+      
       if (response.data.token) {
+        console.log('Token received:', response.data.token); // Debugging line
         localStorage.setItem('token', response.data.token); // Store token in localStorage
-        navigate('/'); // Redirect to the main app
+  
+        // Force a hard refresh to trigger router re-render
+        window.location.reload(); // This reloads the page, forcing the authentication check
       }
     } catch (err) {
       setError('Invalid email or password');
     }
   };
+  
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
@@ -61,5 +66,6 @@ function Login() {
     </div>
   );
 }
+
 
 export default Login;

@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
-import StudentGrades from './StudentGrades'; // Import the StudentGrades component
-import CompetencyManagement from './CompetencyManagement'; // Import the CompetencyManagement component
+import StudentGrades from './StudentGrades';
+import CompetencyManagement from './CompetencyManagement';
 
 function App() {
-  const isAuthenticated = !!localStorage.getItem('token'); // Check if the user is logged in
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Check if the token is in localStorage when the app loads
+    const token = localStorage.getItem('token');
+    setIsAuthenticated(!!token); // Set authentication state
+  }, []);
 
   return (
     <Router>
