@@ -50,6 +50,13 @@ function Login() {
           />
         </div>
         <button type="submit" style={{ padding: '5px 10px' }}>Login</button>
+        <button 
+          type="button" 
+          style={{ padding: '5px 10px', backgroundColor: '#4CAF50', color: 'white', border: 'none', cursor: 'pointer' }} 
+          onClick={() => navigate('/register')}
+        >
+          Register
+        </button>
       </form>
     </div>
   );

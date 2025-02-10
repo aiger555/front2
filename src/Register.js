@@ -54,6 +54,13 @@ function Register() {
           />
         </div>
         <button type="submit" style={{ padding: '5px 10px' }}>Register</button>
+        <button 
+          type="button" 
+          style={{ padding: '5px 10px', backgroundColor: '#4CAF50', color: 'white', border: 'none', cursor: 'pointer' }} 
+          onClick={() => navigate('/login')}
+        >
+          Login
+        </button>
       </form>
     </div>
   );
