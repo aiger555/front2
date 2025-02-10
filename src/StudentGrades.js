@@ -6,8 +6,9 @@ import "./StudentGrades.css"; // Import styles
 const StudentGrades = () => {
   const [rows, setRows] = useState([{ id: uuidv4(), courseId: "", grade: "" }]);
   const [courses, setCourses] = useState([]); // Store the list of courses from the backend
+  const [userInfo, setUserInfo] = useState({ email: "", id: "" }); // Store user information
 
-  // Fetch courses from the backend when the component mounts
+  // Fetch courses and user information when the component mounts
   useEffect(() => {
     const token = localStorage.getItem("token"); // Get the JWT token from localStorage
     if (!token) {
@@ -33,6 +34,20 @@ const StudentGrades = () => {
           localStorage.removeItem("token"); // Remove the token
           window.location.href = "/login"; // Redirect to login
         }
+      });
+
+    // Fetch user information
+    axios
+      .get("http://localhost:8080/users/me", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the request headers
+        },
+      })
+      .then((response) => {
+        setUserInfo(response.data); // Set user information (email, id)
+      })
+      .catch((error) => {
+        console.error("Error fetching user information:", error);
       });
   }, []);
 
@@ -149,8 +164,20 @@ const StudentGrades = () => {
     window.location.href = "/login"; // Redirect to login page
   };
 
+  // Redirect to Competency Management page
+  const redirectToCompetencyManagement = () => {
+    window.location.href = "/competency-management";
+  };
+
   return (
     <div className="container">
+      {/* Display user information */}
+      <div style={{ marginBottom: "20px" }}>
+        <h2>User Information</h2>
+        <p>Email: {userInfo.email}</p>
+        <p>ID: {userInfo.id}</p>
+      </div>
+
       <div id="rows">
         {rows.map((row, index) => (
           <div className="row" key={row.id}>
@@ -190,6 +217,15 @@ const StudentGrades = () => {
       </button>
       <button className="create-course-btn" onClick={createCourse}>
         Create New Course
+      </button>
+
+      {/* Button to redirect to Competency Management page */}
+      <button
+        className="competency-management-btn"
+        onClick={redirectToCompetencyManagement}
+        style={{ margin: "10px", padding: "5px 10px" }}
+      >
+        Go to Competency Management
       </button>
 
       <div>
