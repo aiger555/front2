@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "./StudentGrades.css"; // Import styles
 
 const StudentGrades = () => {
   const [rows, setRows] = useState([{ id: uuidv4(), courseId: "", grade: "" }]);
   const [courses, setCourses] = useState([]); // Store the list of courses from the backend
   const [userInfo, setUserInfo] = useState({ email: "", id: "" }); // Store user information
+  const navigate = useNavigate(); // Initialize useNavigate
 
   // Fetch courses and user information when the component mounts
   useEffect(() => {
@@ -166,7 +168,7 @@ const StudentGrades = () => {
 
   // Redirect to Competency Management page
   const redirectToCompetencyManagement = () => {
-    window.location.href = "/competency-management";
+    navigate("/competency-management"); // Use navigate for internal routing
   };
 
   return (
