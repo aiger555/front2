@@ -4,6 +4,7 @@ import Login from './Login';
 import Register from './Register';
 import StudentGrades from './StudentGrades';
 import CompetencyManagement from './CompetencyManagement';
+import CoursesCompetencies from './CoursesCompetencies';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -30,6 +31,7 @@ function App() {
           path="/competency-management"
           element={isAuthenticated ? <CompetencyManagement /> : <Navigate to="/login" />}
         />
+        <Route path="/courses-competencies" element={<CoursesCompetencies />} />
 
         {/* Redirect to Login if no route matches */}
         <Route path="*" element={<Navigate to="/login" />} />

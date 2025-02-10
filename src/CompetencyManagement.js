@@ -14,10 +14,10 @@ function CompetencyManagement() {
 
   // Fetch all unique and shared competences, courses, and their assignments
   useEffect(() => {
-    const token = localStorage.getItem('token'); // Get the JWT token from localStorage
+    const token = localStorage.getItem('token');
     if (!token) {
       alert('You are not authorized. Please log in.');
-      navigate('/login'); // Redirect to login if no token is found
+      navigate('/login');
       return;
     }
 
@@ -28,14 +28,10 @@ function CompetencyManagement() {
   const fetchCompetences = async (token) => {
     try {
       const uniqueResponse = await axios.get('http://localhost:8080/unique-competences', {
-        headers: {
-          Authorization: `Bearer ${token}`, // Include the token in the request headers
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       const sharedResponse = await axios.get('http://localhost:8080/shared-competences', {
-        headers: {
-          Authorization: `Bearer ${token}`, // Include the token in the request headers
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       setUniqueCompetences(uniqueResponse.data);
       setSharedCompetences(sharedResponse.data);
@@ -45,11 +41,7 @@ function CompetencyManagement() {
       for (const competence of uniqueResponse.data) {
         const assignmentResponse = await axios.get(
           `http://localhost:8080/course-unique-competences?uniqueCompetenceId=${competence.id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // Include the token in the request headers
-            },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         uniqueAssignments[competence.id] = assignmentResponse.data;
       }
@@ -59,11 +51,7 @@ function CompetencyManagement() {
       for (const competence of sharedResponse.data) {
         const assignmentResponse = await axios.get(
           `http://localhost:8080/course-shared-competences?sharedCompetenceId=${competence.id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // Include the token in the request headers
-            },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         sharedAssignments[competence.id] = assignmentResponse.data;
       }
@@ -73,8 +61,8 @@ function CompetencyManagement() {
       console.error('Error fetching competences:', error);
       if (error.response && error.response.status === 401) {
         alert('Session expired. Please log in again.');
-        localStorage.removeItem('token'); // Remove the token
-        navigate('/login'); // Redirect to login
+        localStorage.removeItem('token');
+        navigate('/login');
       }
     }
   };
@@ -82,17 +70,15 @@ function CompetencyManagement() {
   const fetchCourses = async (token) => {
     try {
       const response = await axios.get('http://localhost:8080/courses', {
-        headers: {
-          Authorization: `Bearer ${token}`, // Include the token in the request headers
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       setCourses(response.data);
     } catch (error) {
       console.error('Error fetching courses:', error);
       if (error.response && error.response.status === 401) {
         alert('Session expired. Please log in again.');
-        localStorage.removeItem('token'); // Remove the token
-        navigate('/login'); // Redirect to login
+        localStorage.removeItem('token');
+        navigate('/login');
       }
     }
   };
@@ -105,10 +91,10 @@ function CompetencyManagement() {
 
   // Add a new competence (unique or shared)
   const addCompetence = async () => {
-    const token = localStorage.getItem('token'); // Get the JWT token
+    const token = localStorage.getItem('token');
     if (!token) {
       alert('You are not authorized. Please log in.');
-      navigate('/login'); // Redirect to login if no token is found
+      navigate('/login');
       return;
     }
 
@@ -119,14 +105,10 @@ function CompetencyManagement() {
       const response = await axios.post(
         endpoint,
         { name: newCompetence.name },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the request headers
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      fetchCompetences(token); // Refresh the list
-      setNewCompetence({ name: '', type: 'unique' }); // Reset form
+      fetchCompetences(token);
+      setNewCompetence({ name: '', type: 'unique' });
       alert('Competence added successfully!');
     } catch (error) {
       console.error('Error adding competence:', error);
@@ -136,10 +118,10 @@ function CompetencyManagement() {
 
   // Delete a competence (unique or shared)
   const deleteCompetence = async (id, type) => {
-    const token = localStorage.getItem('token'); // Get the JWT token
+    const token = localStorage.getItem('token');
     if (!token) {
       alert('You are not authorized. Please log in.');
-      navigate('/login'); // Redirect to login if no token is found
+      navigate('/login');
       return;
     }
 
@@ -147,12 +129,8 @@ function CompetencyManagement() {
       const endpoint = type === 'unique'
         ? `http://localhost:8080/unique-competences/delete/${id}`
         : `http://localhost:8080/shared-competences/delete/${id}`;
-      await axios.delete(endpoint, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Include the token in the request headers
-        },
-      });
-      fetchCompetences(token); // Refresh the list
+      await axios.delete(endpoint, { headers: { Authorization: `Bearer ${token}` } });
+      fetchCompetences(token);
       alert('Competence deleted successfully!');
     } catch (error) {
       console.error('Error deleting competence:', error);
@@ -162,10 +140,10 @@ function CompetencyManagement() {
 
   // Assign a competence to a course
   const assignCompetenceToCourse = async (competenceId, type) => {
-    const token = localStorage.getItem('token'); // Get the JWT token
+    const token = localStorage.getItem('token');
     if (!token) {
       alert('You are not authorized. Please log in.');
-      navigate('/login'); // Redirect to login if no token is found
+      navigate('/login');
       return;
     }
 
@@ -178,16 +156,8 @@ function CompetencyManagement() {
       const endpoint = type === 'unique'
         ? `http://localhost:8080/course-unique-competences/create?courseId=${selectedCourseId}&uniqueCompetenceId=${competenceId}`
         : `http://localhost:8080/course-shared-competences/create?courseId=${selectedCourseId}&sharedCompetenceId=${competenceId}`;
-      await axios.post(
-        endpoint,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the request headers
-          },
-        }
-      );
-      fetchCompetences(token); // Refresh the list to show the new assignment
+      await axios.post(endpoint, {}, { headers: { Authorization: `Bearer ${token}` } });
+      fetchCompetences(token);
       alert('Competence assigned to course successfully!');
     } catch (error) {
       console.error('Error assigning competence:', error);
@@ -197,14 +167,35 @@ function CompetencyManagement() {
 
   // Handle logout
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Remove the token
-    navigate('/login'); // Redirect to login page
+    localStorage.removeItem('token');
+    navigate('/login');
   };
 
   // Redirect to StudentGrades page
   const redirectToStudentGrades = () => {
     navigate('/student-grades');
   };
+
+  // Helper function to get course IDs for a competency
+  const getCourseIdsForCompetence = (competenceId, type) => {
+    const assignments = type === 'unique'
+      ? courseAssignments.unique[competenceId]
+      : courseAssignments.shared[competenceId];
+    return assignments?.map((assignment) => assignment.courseId).join(', ') || 'None';
+  };
+
+  // Function to redirect to Courses Competencies page
+  const redirectToCoursesCompetencies = () => {
+    navigate('/courses-competencies'); // Update the route as per your app's routing structure
+  };
+
+  // Add this button in the return statement, near the other navigation buttons
+  <button 
+    onClick={redirectToCoursesCompetencies} 
+    style={{ marginRight: '10px', padding: '5px 10px' }}
+  >
+    Go to Courses Competencies
+  </button>
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
@@ -267,14 +258,6 @@ function CompetencyManagement() {
               >
                 Assign to Course
               </button>
-              <div>
-                <strong>Assigned to Courses:</strong>
-                {courseAssignments.unique[competence.id]?.map((assignment) => (
-                  <div key={assignment.courseId}>
-                    {courses.find(course => course.id === assignment.courseId)?.name}
-                  </div>
-                ))}
-              </div>
             </li>
           ))}
         </ul>
@@ -299,14 +282,6 @@ function CompetencyManagement() {
               >
                 Assign to Course
               </button>
-              <div>
-                <strong>Assigned to Courses:</strong>
-                {courseAssignments.shared[competence.id]?.map((assignment) => (
-                  <div key={assignment.courseId}>
-                    {courses.find(course => course.id === assignment.courseId)?.name}
-                  </div>
-                ))}
-              </div>
             </li>
           ))}
         </ul>
@@ -317,6 +292,12 @@ function CompetencyManagement() {
         <button onClick={redirectToStudentGrades} style={{ marginRight: '10px', padding: '5px 10px' }}>
           Go to Student Grades
         </button>
+        <button 
+          onClick={redirectToCoursesCompetencies} 
+          style={{ marginRight: '10px', padding: '5px 10px' }}
+        >
+          Go to Courses Competencies
+        </button> 
         <button onClick={handleLogout} style={{ padding: '5px 10px' }}>
           Logout
         </button>
