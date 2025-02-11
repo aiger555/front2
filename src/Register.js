@@ -28,42 +28,140 @@ function Register() {
   };
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h1>Register</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {success && <p style={{ color: 'green' }}>{success}</p>}
-      <form onSubmit={handleRegister}>
-        <div style={{ marginBottom: '10px' }}>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{ marginLeft: '10px', padding: '5px' }}
-          />
-        </div>
-        <div style={{ marginBottom: '10px' }}>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={{ marginLeft: '10px', padding: '5px' }}
-          />
-        </div>
-        <button type="submit" style={{ padding: '5px 10px' }}>Register</button>
-        <button 
-          type="button" 
-          style={{ padding: '5px 10px', backgroundColor: '#4CAF50', color: 'white', border: 'none', cursor: 'pointer' }} 
-          onClick={() => navigate('/login')}
-        >
-          Login
-        </button>
-      </form>
+    <div style={styles.container}>
+      <a href="/" style={styles.logo}>
+        <img src="/alatooo.png" alt="Logo" style={styles.logoImage} />
+      </a>
+      <div style={styles.loginBox}>
+        <h1 style={styles.title}>Register</h1>
+        {error && <p style={styles.error}>{error}</p>}
+        {success && <p style={styles.success}>{success}</p>}
+        <form onSubmit={handleRegister}>
+          <div style={styles.inputGroup}>
+            <label style={styles.label}>Email:</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              style={styles.input}
+            />
+          </div>
+          <div style={styles.inputGroup}>
+            <label style={styles.label}>Password:</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={styles.input}
+            />
+          </div>
+          <button type="submit" style={styles.button}>Register</button>
+          <button 
+            type="button" 
+            style={styles.registerButton} 
+            onClick={() => navigate('/login')}
+          >
+            Login
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100vh',
+    backgroundColor: '#e9ecef',
+    position: 'relative',
+  },
+  logo: {
+    position: 'absolute',
+    top: '20px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+  },
+  logoImage: {
+    width: '120px',
+    height: 'auto',
+  },
+  loginBox: {
+    backgroundColor: 'white',
+    padding: '50px',
+    borderRadius: '12px',
+    boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.15)',
+    textAlign: 'center',
+    width: '400px',
+  },
+  title: {
+    marginBottom: '20px',
+    fontSize: '26px',
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  error: {
+    color: 'red',
+    marginBottom: '10px',
+    fontSize: '14px',
+  },
+  success: {
+    color: 'green',
+    marginBottom: '10px',
+    fontSize: '14px',
+  },
+  inputGroup: {
+    marginBottom: '20px',
+    textAlign: 'left',
+  },
+  label: {
+    fontSize: '16px',
+    fontWeight: 'bold',
+    color: '#555',
+  },
+  input: {
+    width: '100%',
+    padding: '12px',
+    fontSize: '16px',
+    borderRadius: '6px',
+    border: '1px solid #ccc',
+    marginTop: '5px',
+    transition: 'border 0.3s ease',
+  },
+  button: {
+    padding: '12px',
+    fontSize: '18px',
+    borderRadius: '6px',
+    border: 'none',
+    backgroundColor: '#007BFF',
+    color: 'white',
+    cursor: 'pointer',
+    width: '100%',
+    marginTop: '15px',
+    transition: 'background 0.3s ease',
+  },
+  registerButton: {
+    padding: '12px',
+    fontSize: '18px',
+    borderRadius: '6px',
+    border: 'none',
+    backgroundColor: '#28a745',
+    color: 'white',
+    cursor: 'pointer',
+    width: '100%',
+    marginTop: '10px',
+    transition: 'background 0.3s ease',
+  },
+  buttonHover: {
+    backgroundColor: '#0056b3',
+  },
+  registerButtonHover: {
+    backgroundColor: '#218838',
+  },
+};
 
 export default Register;
