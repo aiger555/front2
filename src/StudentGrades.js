@@ -293,7 +293,7 @@ const StudentGrades = () => {
       </button>
 
       <div>
-        <button onClick={handleLogout} style={{ padding: "5px 10px" }}>
+        <button className="logout-container" onClick={handleLogout} style={{ padding: "5px 10px" }}>
           Logout
         </button>
       </div>

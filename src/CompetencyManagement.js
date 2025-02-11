@@ -240,12 +240,13 @@ function CompetencyManagement() {
       </div>
 
       {/* List of Unique Competences */}
-      <div style={{ marginBottom: '20px' }}>
+      <div style={{  marginBottom: '20px' }}>
         <h2>Unique Competences</h2>
         <ul>
           {uniqueCompetences.map((competence) => (
-            <li key={competence.id} style={{ marginBottom: '10px' }}>
+            <li key={competence.id} style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               {competence.name}
+              <div className="buttuns-container">
               <button
                 onClick={() => deleteCompetence(competence.id, 'unique')}
                 style={{ marginLeft: '10px', padding: '2px 5px' }}
@@ -258,6 +259,7 @@ function CompetencyManagement() {
               >
                 Assign to Course
               </button>
+              </div>
             </li>
           ))}
         </ul>
@@ -268,8 +270,9 @@ function CompetencyManagement() {
         <h2>Shared Competences</h2>
         <ul>
           {sharedCompetences.map((competence) => (
-            <li key={competence.id} style={{ marginBottom: '10px' }}>
+            <li key={competence.id} style={{  marginBottom: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               {competence.name}
+              <div className="buttuns-container">
               <button
                 onClick={() => deleteCompetence(competence.id, 'shared')}
                 style={{ marginLeft: '10px', padding: '2px 5px' }}
@@ -282,6 +285,7 @@ function CompetencyManagement() {
               >
                 Assign to Course
               </button>
+              </div>
             </li>
           ))}
         </ul>
@@ -289,16 +293,16 @@ function CompetencyManagement() {
 
       {/* Buttons for Logout and Redirect to StudentGrades */}
       <div>
-        <button onClick={redirectToStudentGrades} style={{ marginRight: '10px', padding: '5px 10px' }}>
+        <button className='butttons' onClick={redirectToStudentGrades} style={{ marginRight: '10px', padding: '5px 10px' }}>
           Go to Student Grades
         </button>
-        <button 
+        <button className='butttons' 
           onClick={redirectToCoursesCompetencies} 
           style={{ marginRight: '10px', padding: '5px 10px' }}
         >
           Go to Courses Competencies
         </button> 
-        <button onClick={handleLogout} style={{ padding: '5px 10px' }}>
+        <button className='butttons' onClick={handleLogout} style={{ padding: '5px 10px' }}>
           Logout
         </button>
       </div>

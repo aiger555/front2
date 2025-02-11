@@ -70,15 +70,6 @@ function Login() {
 }
 
 const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100vh',
-    backgroundColor: '#e9ecef',
-    position: 'relative',
-  },
   logo: {
     position: 'absolute',
     top: '20px',
@@ -88,6 +79,7 @@ const styles = {
   logoImage: {
     width: '120px',
     height: 'auto',
+    marginTop: '50px'
   },
   loginBox: {
     backgroundColor: 'white',
@@ -135,7 +127,7 @@ const styles = {
     fontSize: '18px',
     borderRadius: '6px',
     border: 'none',
-    backgroundColor: '#007BFF',
+    backgroundColor: 'rgb(192, 110, 72)',
     color: 'white',
     cursor: 'pointer',
     width: '100%',
@@ -147,7 +139,7 @@ const styles = {
     fontSize: '18px',
     borderRadius: '6px',
     border: 'none',
-    backgroundColor: '#28a745',
+    backgroundColor: '	#5C4033',
     color: 'white',
     cursor: 'pointer',
     width: '100%',

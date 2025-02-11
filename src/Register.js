@@ -71,15 +71,6 @@ function Register() {
   );
 }
 const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100vh',
-    backgroundColor: '#e9ecef',
-    position: 'relative',
-  },
   logo: {
     position: 'absolute',
     top: '20px',
@@ -87,6 +78,7 @@ const styles = {
     transform: 'translateX(-50%)',
   },
   logoImage: {
+    marginTop: '50px',
     width: '120px',
     height: 'auto',
   },
@@ -137,7 +129,7 @@ const styles = {
     fontSize: '18px',
     borderRadius: '6px',
     border: 'none',
-    backgroundColor: '#007BFF',
+    backgroundColor: '#5C4033',
     color: 'white',
     cursor: 'pointer',
     width: '100%',
@@ -149,7 +141,7 @@ const styles = {
     fontSize: '18px',
     borderRadius: '6px',
     border: 'none',
-    backgroundColor: '#28a745',
+    backgroundColor: 'rgb(192, 110, 72)',
     color: 'white',
     cursor: 'pointer',
     width: '100%',

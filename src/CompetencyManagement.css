@@ -1,72 +1,135 @@
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  margin: 0;
-  padding: 0;
+/* CompetencyManagement.css */
+
+/* Container */
+
+/* Title */
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #5a3e36; /* Dark brown */
+  text-align: center;
 }
 
-.container {
-  max-width: 800px;
-  margin: 20px auto;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+/* Form Section */
+h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #5a3e36; /* Dark brown */
 }
 
-h1, h2 {
-  color: #333;
-}
-
-input, select, button {
+input[type="text"],
+select {
   padding: 10px;
-  margin: 5px 0;
-  border: 1px solid #ccc;
+  border: 1px solid #d2b48c; /* Light brown border */
   border-radius: 5px;
+  font-size: 16px;
+  color: #5a3e36; /* Dark brown */
+  background: #fff; /* White background */
+  margin-right: 10px;
+  margin-bottom: 10px;
+  flex: 1;
+}
+
+input[type="text"]:focus,
+select:focus {
+  outline: none;
+  border-color: #a67c52; /* Medium brown */
+  box-shadow: 0 0 5px rgba(166, 124, 82, 0.5); /* Focus shadow */
 }
 
 button {
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
+  padding: 10px 20px;
   border: none;
-  transition: background 0.3s;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
-  background-color: #0056b3;
+  transform: scale(1.05); /* Slight zoom on hover */
 }
 
+/* Competence List */
 ul {
   list-style-type: none;
   padding: 0;
 }
 
 li {
-  background: #e9ecef;
-  margin: 10px 0;
-  padding: 10px;
-  border-radius: 5px;
+  margin-bottom: 15px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  background: #f4e7d3; /* Light beige */
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-li div {
+li button {
+  margin-left: 10px;
+  background: #d2b48c; /* Light brown */
+  color: #5a3e36; /* Dark brown text */
+}
+
+li button:hover {
+  background: #b8860b; /* Golden brown */
+}
+
+/* Button Container */
+.button-container {
   display: flex;
-  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
 }
 
-strong {
-  color: #555;
+.button-container button {
+  background: #a67c52; /* Medium brown */
+  color: #fff; /* White text */
 }
 
-@media (max-width: 600px) {
-  .container {
-    width: 90%;
-  }
-
-  button {
-    width: 100%;
-  }
+.button-container button:hover {
+  background: #8b5a2b; /* Darker brown */
 }
+
+/* Add New Competence Form */
+.add-competence-form {
+  margin-bottom: 20px;
+}
+
+.add-competence-form button {
+  background: #8b5a2b; /* Dark brown */
+  color: #fff; /* White text */
+}
+
+.add-competence-form button:hover {
+  background: #5a3e36; /* Darker brown */
+}
+
+/* Assign Competence Section */
+.assign-competence-section {
+  margin-bottom: 20px;
+}
+
+.assign-competence-section button {
+  background: #5a3e36; /* Dark brown */
+  color: #fff; /* White text */
+}
+
+.assign-competence-section button:hover {
+  background: #3e2a22; /* Darker brown */
+}
+
+.butttons{
+  background: #3e2a22;
+  color: beige;
+}
+
+.buttuns-container{
+  gap: 10px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+

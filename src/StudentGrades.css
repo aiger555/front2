@@ -1,50 +1,188 @@
+/* General Styles */
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #f4e7d3, #d2b48c); /* Beige to brown gradient */
+  color: #5a3e36; /* Dark brown text */
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .row {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-  
-  select,
-  input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .add-btn,
-  .delete-btn,
-  .calculate-btn,
-  .create-course-btn {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .add-btn {
-    background-color: #28a745;
-    color: white;
-  }
-  
-  .delete-btn {
-    background-color: #dc3545;
-    color: white;
-  }
-  
-  .calculate-btn {
-    background-color: #007bff;
-    color: white;
-    margin-top: 10px;
-  }
-  
-  .create-course-btn {
-    background-color: #ffc107;
-    color: black;
-    margin-top: 10px;
-  }
+  background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  width: 90%;
+  max-width: 800px;
+  margin: 20px;
+}
+
+h2 {
+  color: #5a3e36; /* Dark brown */
+  margin-bottom: 20px;
+  font-size: 24px;
+  text-align: center;
+}
+
+/* User Information Section */
+.user-info {
+  background: #f4e7d3; /* Light beige */
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-info p {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #5a3e36; /* Dark brown */
+}
+
+/* Rows Section */
+#rows {
+  margin-bottom: 20px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  background: #f4e7d3; /* Light beige */
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+select,
+input[type="number"] {
+  padding: 10px;
+  border: 1px solid #d2b48c; /* Light brown border */
+  border-radius: 5px;
+  font-size: 16px;
+  color: #5a3e36; /* Dark brown */
+  background: #fff; /* White background */
+  flex: 1;
+}
+
+select:focus,
+input[type="number"]:focus {
+  outline: none;
+  border-color: #a67c52; /* Medium brown */
+  box-shadow: 0 0 5px rgba(166, 124, 82, 0.5); /* Focus shadow */
+}
+
+/* Buttons */
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.05); /* Slight zoom on hover */
+}
+
+.add-btn {
+  background: #a67c52; /* Medium brown */
+  color: #fff; /* White text */
+}
+
+.add-btn:hover {
+  background: #8b5a2b; /* Darker brown */
+}
+
+.delete-btn {
+  background: #d2b48c; /* Light brown */
+  color: #5a3e36; /* Dark brown text */
+}
+
+.delete-btn:hover {
+  background: #b8860b; /* Golden brown */
+}
+
+.calculate-btn {
+  background: #8b5a2b; /* Dark brown */
+  color: #fff; /* White text */
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.calculate-btn:hover {
+  background: #5a3e36; /* Darker brown */
+}
+
+.create-course-btn {
+  background: #d2b48c; /* Light brown */
+  color: #5a3e36; /* Dark brown text */
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.create-course-btn:hover {
+  background: #a67c52; /* Medium brown */
+}
+
+.competency-management-btn {
+  background: #5a3e36; /* Dark brown */
+  color: #fff; /* White text */
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.competency-management-btn:hover {
+  background: #3e2a22; /* Darker brown */
+}
+
+/* Delete Course Section */
+.delete-course-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.delete-course-section select {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #d2b48c; /* Light brown border */
+  border-radius: 5px;
+  font-size: 16px;
+  color: #5a3e36; /* Dark brown */
+  background: #fff; /* White background */
+}
+
+.delete-course-section button {
+  background: #ff4d4d; /* Red */
+  color: #fff; /* White text */
+}
+
+.delete-course-section button:hover {
+  background: #cc0000; /* Darker red */
+}
+
+/* Logout Button */
+.logout-btn {
+  background: #5a3e36; /* Dark brown */
+  color: #280b0b; /* White text */
+  width: 100%;
+  margin-top: 10px;
+}
+
+.logout-btn:hover {
+  background: #3e2a22; /* Darker brown */
+}
+
+.logout-container{
+  background-color: rgb(63, 19, 19);
+  color: rgb(255, 226, 226);
+  padding: 10px 50px;
+  margin: 0 270px;
+}
