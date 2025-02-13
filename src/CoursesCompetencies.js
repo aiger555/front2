@@ -18,8 +18,6 @@ function CoursesCompetencies() {
     }
 
     fetchCoursesWithCompetencies(token);
-    fetchUniqueCompetencies(token);
-    fetchSharedCompetencies(token);
   }, [navigate]);
 
   const fetchCoursesWithCompetencies = async (token) => {
@@ -65,30 +63,6 @@ function CoursesCompetencies() {
         localStorage.removeItem("token");
         navigate("/login");
       }
-    }
-  };
-
-  const fetchUniqueCompetencies = async (token) => {
-    try {
-      const response = await axios.get("https://transcript2-c5ec5ab05f1a.herokuapp.com/unique-competences", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log("Unique competencies loaded:", response.data);
-      setUniqueCompetencies(response.data);
-    } catch (error) {
-      console.error("Error fetching unique competencies:", error);
-    }
-  };
-
-  const fetchSharedCompetencies = async (token) => {
-    try {
-      const response = await axios.get("https://transcript2-c5ec5ab05f1a.herokuapp.com/shared-competences", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log("Shared competencies loaded:", response.data);
-      setSharedCompetencies(response.data);
-    } catch (error) {
-      console.error("Error fetching shared competencies:", error);
     }
   };
 
