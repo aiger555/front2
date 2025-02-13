@@ -34,7 +34,7 @@ function App() {
         <Route path="/courses-competencies" element={<CoursesCompetencies />} />
 
         {/* Redirect to Login if no route matches */}
-        <Route path="*" element={<Navigate to="/login" />} />
+        <Route path="*" element={<Navigate to="/register" />} />
       </Routes>
     </Router>
   );

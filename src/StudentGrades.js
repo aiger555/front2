@@ -109,18 +109,24 @@ const StudentGrades = () => {
     const validGrades = rows
       .map((row) => (row.grade.trim() ? parseFloat(row.grade) : NaN))
       .filter((grade) => !isNaN(grade));
-
+  
     if (validGrades.length === 0) {
       alert("Please enter grades to calculate the average!");
       return;
     }
-
+  
     const average =
       validGrades.reduce((sum, grade) => sum + grade, 0) / validGrades.length;
     alert(`Average grade: ${average.toFixed(2)}`);
-
-    // Redirect to another page (for example, bar chart page)
-    window.location.href = "https://transcript2-c5ec5ab05f1a.herokuapp.com/barChart";
+  
+    // Redirect to the bar chart page with the token
+    const token = localStorage.getItem("token");
+    if (token) {
+      window.location.href = `https://transcript2-c5ec5ab05f1a.herokuapp.com/barChart?token=${token}`;
+    } else {
+      alert("You are not authorized. Please log in.");
+      window.location.href = "/login";
+    }
   };
 
   const createCourse = () => {
