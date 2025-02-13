@@ -144,7 +144,7 @@ function CoursesCompetencies() {
         style={{
           marginTop: "20px",
           padding: "10px",
-          backgroundColor: "	#5C4033",
+          backgroundColor: "#5C4033",
           color: "white",
           border: "none",
           cursor: "pointer",

@@ -128,7 +128,7 @@ const StudentGrades = () => {
     alert(`Average grade: ${average.toFixed(2)}`);
 
     // Redirect to another page (for example, bar chart page)
-    window.location.href = "https://transcript2-c5ec5ab05f1a.herokuapp.com/barChart";
+    window.location.href = "https://transcriptfront-62cad49a4e47.herokuapp.com/barChart";
   };
 
   // Function to create a new course
