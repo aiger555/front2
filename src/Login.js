@@ -11,7 +11,7 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/auth/signin', {
+      const response = await axios.post('https://transcript2-c5ec5ab05f1a.herokuapp.com/auth/signin', {
         email,
         password,
       });

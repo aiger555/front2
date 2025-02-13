@@ -27,10 +27,10 @@ function CompetencyManagement() {
 
   const fetchCompetences = async (token) => {
     try {
-      const uniqueResponse = await axios.get('http://localhost:8080/unique-competences', {
+      const uniqueResponse = await axios.get('https://transcript2-c5ec5ab05f1a.herokuapp.com/unique-competences', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const sharedResponse = await axios.get('http://localhost:8080/shared-competences', {
+      const sharedResponse = await axios.get('https://transcript2-c5ec5ab05f1a.herokuapp.com/shared-competences', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUniqueCompetences(uniqueResponse.data);
@@ -40,7 +40,7 @@ function CompetencyManagement() {
       const uniqueAssignments = {};
       for (const competence of uniqueResponse.data) {
         const assignmentResponse = await axios.get(
-          `http://localhost:8080/course-unique-competences?uniqueCompetenceId=${competence.id}`,
+          `https://transcript2-c5ec5ab05f1a.herokuapp.com/course-unique-competences?uniqueCompetenceId=${competence.id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         uniqueAssignments[competence.id] = assignmentResponse.data;
@@ -50,7 +50,7 @@ function CompetencyManagement() {
       const sharedAssignments = {};
       for (const competence of sharedResponse.data) {
         const assignmentResponse = await axios.get(
-          `http://localhost:8080/course-shared-competences?sharedCompetenceId=${competence.id}`,
+          `https://transcript2-c5ec5ab05f1a.herokuapp.com/course-shared-competences?sharedCompetenceId=${competence.id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         sharedAssignments[competence.id] = assignmentResponse.data;
@@ -69,7 +69,7 @@ function CompetencyManagement() {
 
   const fetchCourses = async (token) => {
     try {
-      const response = await axios.get('http://localhost:8080/courses', {
+      const response = await axios.get('https://transcript2-c5ec5ab05f1a.herokuapp.com/courses', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCourses(response.data);
@@ -100,8 +100,8 @@ function CompetencyManagement() {
 
     try {
       const endpoint = newCompetence.type === 'unique'
-        ? 'http://localhost:8080/unique-competences/create'
-        : 'http://localhost:8080/shared-competences/create';
+        ? 'https://transcript2-c5ec5ab05f1a.herokuapp.com/unique-competences/create'
+        : 'https://transcript2-c5ec5ab05f1a.herokuapp.com/shared-competences/create';
       const response = await axios.post(
         endpoint,
         { name: newCompetence.name },
@@ -127,8 +127,8 @@ function CompetencyManagement() {
 
     try {
       const endpoint = type === 'unique'
-        ? `http://localhost:8080/unique-competences/delete/${id}`
-        : `http://localhost:8080/shared-competences/delete/${id}`;
+        ? `https://transcript2-c5ec5ab05f1a.herokuapp.com/unique-competences/delete/${id}`
+        : `https://transcript2-c5ec5ab05f1a.herokuapp.com/shared-competences/delete/${id}`;
       await axios.delete(endpoint, { headers: { Authorization: `Bearer ${token}` } });
       fetchCompetences(token);
       alert('Competence deleted successfully!');
@@ -154,8 +154,8 @@ function CompetencyManagement() {
 
     try {
       const endpoint = type === 'unique'
-        ? `http://localhost:8080/course-unique-competences/create?courseId=${selectedCourseId}&uniqueCompetenceId=${competenceId}`
-        : `http://localhost:8080/course-shared-competences/create?courseId=${selectedCourseId}&sharedCompetenceId=${competenceId}`;
+        ? `https://transcript2-c5ec5ab05f1a.herokuapp.com/course-unique-competences/create?courseId=${selectedCourseId}&uniqueCompetenceId=${competenceId}`
+        : `https://transcript2-c5ec5ab05f1a.herokuapp.com/course-shared-competences/create?courseId=${selectedCourseId}&sharedCompetenceId=${competenceId}`;
       await axios.post(endpoint, {}, { headers: { Authorization: `Bearer ${token}` } });
       fetchCompetences(token);
       alert('Competence assigned to course successfully!');

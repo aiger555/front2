@@ -22,7 +22,7 @@ const StudentGrades = () => {
 
     // Fetch courses with the JWT token in the headers
     axios
-      .get("http://localhost:8080/courses", {
+      .get("https://transcript2-c5ec5ab05f1a.herokuapp.com/courses", {
         headers: {
           Authorization: `Bearer ${token}`, // Include the token in the request headers
         },
@@ -41,7 +41,7 @@ const StudentGrades = () => {
 
     // Fetch user information
     axios
-      .get("http://localhost:8080/users/me", {
+      .get("https://transcript2-c5ec5ab05f1a.herokuapp.com/users/me", {
         headers: {
           Authorization: `Bearer ${token}`, // Include the token in the request headers
         },
@@ -68,7 +68,7 @@ const StudentGrades = () => {
     // Perform DELETE request to remove the grade entry (optional)
     const token = localStorage.getItem("token"); // Get the JWT token
     axios
-      .delete(`http://localhost:8080/courses/delete/${id}`, {
+      .delete(`https://transcript2-c5ec5ab05f1a.herokuapp.com/courses/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`, // Include the token in the request headers
         },
@@ -95,7 +95,7 @@ const StudentGrades = () => {
       const token = localStorage.getItem("token"); // Get the JWT token
       axios
         .put(
-          `http://localhost:8080/courses/update/${updatedRow.courseId}`,
+          `https://transcript2-c5ec5ab05f1a.herokuapp.com/courses/update/${updatedRow.courseId}`,
           updatedRow,
           {
             headers: {
@@ -128,7 +128,7 @@ const StudentGrades = () => {
     alert(`Average grade: ${average.toFixed(2)}`);
 
     // Redirect to another page (for example, bar chart page)
-    window.location.href = "http://localhost:8080/barChart";
+    window.location.href = "https://transcript2-c5ec5ab05f1a.herokuapp.com/barChart";
   };
 
   // Function to create a new course
@@ -141,7 +141,7 @@ const StudentGrades = () => {
     // Perform POST request to create a new course
     const token = localStorage.getItem("token"); // Get the JWT token
     axios
-      .post("http://localhost:8080/courses/create", newCourse, {
+      .post("https://transcript2-c5ec5ab05f1a.herokuapp.com/courses/create", newCourse, {
         headers: {
           Authorization: `Bearer ${token}`, // Include the token in the request headers
         },
@@ -177,7 +177,7 @@ const StudentGrades = () => {
 
     try {
       // Perform DELETE request to delete the course
-      await axios.delete(`http://localhost:8080/courses/delete/${selectedCourseId}`, {
+      await axios.delete(`https://transcript2-c5ec5ab05f1a.herokuapp.com/courses/delete/${selectedCourseId}`, {
         headers: {
           Authorization: `Bearer ${token}`, // Include the token in the request headers
         },

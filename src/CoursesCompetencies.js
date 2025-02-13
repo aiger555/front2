@@ -25,7 +25,7 @@ function CoursesCompetencies() {
   const fetchCoursesWithCompetencies = async (token) => {
     try {
       // Fetch all courses
-      const coursesResponse = await axios.get("http://localhost:8080/courses", {
+      const coursesResponse = await axios.get("https://transcript2-c5ec5ab05f1a.herokuapp.com/courses", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -35,12 +35,12 @@ function CoursesCompetencies() {
       const updatedCourses = await Promise.all(
         coursesData.map(async (course) => {
           const uniqueCompetencesRes = await axios.get(
-            `http://localhost:8080/course-unique-competences?courseId=${course.id}`,
+            `https://transcript2-c5ec5ab05f1a.herokuapp.com/course-unique-competences?courseId=${course.id}`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
 
           const sharedCompetencesRes = await axios.get(
-            `http://localhost:8080/course-shared-competences?courseId=${course.id}`,
+            `https://transcript2-c5ec5ab05f1a.herokuapp.com/course-shared-competences?courseId=${course.id}`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
 
@@ -70,7 +70,7 @@ function CoursesCompetencies() {
 
   const fetchUniqueCompetencies = async (token) => {
     try {
-      const response = await axios.get("http://localhost:8080/unique-competences", {
+      const response = await axios.get("https://transcript2-c5ec5ab05f1a.herokuapp.com/unique-competences", {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log("Unique competencies loaded:", response.data);
@@ -82,7 +82,7 @@ function CoursesCompetencies() {
 
   const fetchSharedCompetencies = async (token) => {
     try {
-      const response = await axios.get("http://localhost:8080/shared-competences", {
+      const response = await axios.get("https://transcript2-c5ec5ab05f1a.herokuapp.com/shared-competences", {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log("Shared competencies loaded:", response.data);

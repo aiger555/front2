@@ -12,7 +12,7 @@ function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/auth/signup', {
+      const response = await axios.post('https://transcript2-c5ec5ab05f1a.herokuapp.com/auth/signup', {
         email,
         password,
       });
