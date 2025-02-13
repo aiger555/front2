@@ -1,0 +1,24 @@
+[33m99be5b8[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m index
+[33m687d082[m dependency
+[33md6d1fd1[m deleted
+[33m9399b5e[m nginx
+[33m37a24d6[m docker
+[33ma1b3406[m dependency
+[33mc4c9bc5[m[33m ([m[1;32mfeature-from-commit[m[33m)[m styled
+[33md79f6e0[m Login and Register
+[33m3d03975[m Fixed C & com
+[33m45b9e42[m Added CourseComp
+[33m92b7c6b[m Fixed stG
+[33m9d37cfd[m fixed studG
+[33mbf00023[m fixed sign-in
+[33m038e69f[m fixed com-m
+[33m933d4e5[m fixed studG
+[33m8c0f3a9[m fixed studG
+[33mdc44253[m sign added
+[33m74fb7b3[m[33m ([m[1;31morigin/second[m[33m, [m[1;31morigin/masterr[m[33m, [m[1;32msecond[m[33m, [m[1;32mmasterr[m[33m)[m fixed)
+[33md588eb9[m redone comManag
+[33mbb94598[m fixed sharedC
+[33mfd3d178[m fixed
+[33m518a996[m Fixed
+[33m61f03b4[m Added ComptenciesManagement
+[33mf0ace5d[m Fixed
