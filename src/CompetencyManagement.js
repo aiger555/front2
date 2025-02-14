@@ -140,28 +140,28 @@ function CompetencyManagement() {
 
   // Assign a competence to a course
   const assignCompetenceToCourse = async (competenceId, type) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      alert('You are not authorized. Please log in.');
-      navigate('/login');
+      alert("You are not authorized. Please log in.");
+      navigate("/login");
       return;
     }
-
+  
     if (!selectedCourseId) {
-      alert('Please select a course first.');
+      alert("Please select a course first.");
       return;
     }
-
+  
     try {
       const endpoint = type === 'unique'
         ? `https://transcript2-c5ec5ab05f1a.herokuapp.com/course-unique-competences/create?courseId=${selectedCourseId}&uniqueCompetenceId=${competenceId}`
         : `https://transcript2-c5ec5ab05f1a.herokuapp.com/course-shared-competences/create?courseId=${selectedCourseId}&sharedCompetenceId=${competenceId}`;
       await axios.post(endpoint, {}, { headers: { Authorization: `Bearer ${token}` } });
-      fetchCompetences(token);
-      alert('Competence assigned to course successfully!');
+      fetchCompetences(token); // Refresh the list of competencies
+      alert("Competence assigned to course successfully!");
     } catch (error) {
-      console.error('Error assigning competence:', error);
-      alert('Failed to assign competence to course.');
+      console.error("Error assigning competence:", error);
+      alert("Failed to assign competence to course.");
     }
   };
 

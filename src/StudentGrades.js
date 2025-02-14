@@ -125,10 +125,10 @@ const StudentGrades = () => {
       window.location.href = `https://transcript2-c5ec5ab05f1a.herokuapp.com/barChart?token=${token}`;
     } else {
       alert("You are not authorized. Please log in.");
-      window.location.href = "/login";
+      navigate("/login");
     }
   };
-
+  
   const createCourse = () => {
     const courseName = prompt("Enter the name of the new course:");
     if (!courseName) return;
