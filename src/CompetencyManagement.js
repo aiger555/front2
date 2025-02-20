@@ -312,12 +312,6 @@ function CompetencyManagement() {
         <button className='buttons' onClick={handleLogout} style={{ padding: '5px 10px' }}>
           Logout
         </button>
-        <button
-          onClick={redirectToCoursesCompetencies}
-          style={{ marginRight: '10px', padding: '5px 10px' }}
-        >
-          Go to Courses Competencies
-        </button>
       </div>
     </div>
   );

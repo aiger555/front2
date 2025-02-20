@@ -278,6 +278,15 @@ const StudentGrades = () => {
           Logout
         </button>
       </div>
+      <button
+        className="video-tutorial-btn"
+        onClick={() => window.open("https://drive.google.com/file/d/1wAYP6YULI0H-zZbQVkS0tHoj_878dlFH/view?usp=sharing", "_blank")}
+        style={{ margin: "10px", padding: "5px 10px", backgroundColor: "blue", color: "white", border: "none", borderRadius: "5px", cursor: "pointer" }}
+      >
+        Video Tutorial
+      </button>
+
+
     </div>
   );
 };
