@@ -63,6 +63,8 @@ function CompetencyManagement() {
         alert('Session expired. Please log in again.');
         localStorage.removeItem('token');
         navigate('/login');
+      } else if (error.response && error.response.status === 403) {
+        alert('You do not have permission to perform this action.');
       }
     }
   };
@@ -79,6 +81,8 @@ function CompetencyManagement() {
         alert('Session expired. Please log in again.');
         localStorage.removeItem('token');
         navigate('/login');
+      } else if (error.response && error.response.status === 403) {
+        alert('You do not have permission to perform this action.');
       }
     }
   };
@@ -98,6 +102,11 @@ function CompetencyManagement() {
       return;
     }
 
+    if (!newCompetence.name.trim()) {
+      alert('Competence name cannot be empty.');
+      return;
+    }
+
     try {
       const endpoint = newCompetence.type === 'unique'
         ? 'https://transcript2-c5ec5ab05f1a.herokuapp.com/unique-competences/create'
@@ -112,7 +121,11 @@ function CompetencyManagement() {
       alert('Competence added successfully!');
     } catch (error) {
       console.error('Error adding competence:', error);
-      alert('Failed to add competence.');
+      if (error.response && error.response.status === 403) {
+        alert('You do not have permission to add a competence.');
+      } else {
+        alert('Failed to add competence.');
+      }
     }
   };
 
@@ -134,34 +147,42 @@ function CompetencyManagement() {
       alert('Competence deleted successfully!');
     } catch (error) {
       console.error('Error deleting competence:', error);
-      alert('Failed to delete competence.');
+      if (error.response && error.response.status === 403) {
+        alert('You do not have permission to delete this competence.');
+      } else {
+        alert('Failed to delete competence.');
+      }
     }
   };
 
   // Assign a competence to a course
   const assignCompetenceToCourse = async (competenceId, type) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (!token) {
-      alert("You are not authorized. Please log in.");
-      navigate("/login");
+      alert('You are not authorized. Please log in.');
+      navigate('/login');
       return;
     }
-  
+
     if (!selectedCourseId) {
-      alert("Please select a course first.");
+      alert('Please select a course first.');
       return;
     }
-  
+
     try {
       const endpoint = type === 'unique'
         ? `https://transcript2-c5ec5ab05f1a.herokuapp.com/course-unique-competences/create?courseId=${selectedCourseId}&uniqueCompetenceId=${competenceId}`
         : `https://transcript2-c5ec5ab05f1a.herokuapp.com/course-shared-competences/create?courseId=${selectedCourseId}&sharedCompetenceId=${competenceId}`;
       await axios.post(endpoint, {}, { headers: { Authorization: `Bearer ${token}` } });
       fetchCompetences(token); // Refresh the list of competencies
-      alert("Competence assigned to course successfully!");
+      alert('Competence assigned to course successfully!');
     } catch (error) {
-      console.error("Error assigning competence:", error);
-      alert("Failed to assign competence to course.");
+      console.error('Error assigning competence:', error);
+      if (error.response && error.response.status === 403) {
+        alert('You do not have permission to assign this competence.');
+      } else {
+        alert('Failed to assign competence to course.');
+      }
     }
   };
 
@@ -186,16 +207,8 @@ function CompetencyManagement() {
 
   // Function to redirect to Courses Competencies page
   const redirectToCoursesCompetencies = () => {
-    navigate('/courses-competencies'); // Update the route as per your app's routing structure
+    navigate('/courses-competencies');
   };
-
-  // Add this button in the return statement, near the other navigation buttons
-  <button 
-    onClick={redirectToCoursesCompetencies} 
-    style={{ marginRight: '10px', padding: '5px 10px' }}
-  >
-    Go to Courses Competencies
-  </button>
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
@@ -240,25 +253,25 @@ function CompetencyManagement() {
       </div>
 
       {/* List of Unique Competences */}
-      <div style={{  marginBottom: '20px' }}>
+      <div style={{ marginBottom: '20px' }}>
         <h2>Unique Competences</h2>
         <ul>
           {uniqueCompetences.map((competence) => (
             <li key={competence.id} style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               {competence.name}
-              <div className="buttuns-container">
-              <button
-                onClick={() => deleteCompetence(competence.id, 'unique')}
-                style={{ marginLeft: '10px', padding: '2px 5px' }}
-              >
-                Delete
-              </button>
-              <button
-                onClick={() => assignCompetenceToCourse(competence.id, 'unique')}
-                style={{ marginLeft: '10px', padding: '2px 5px' }}
-              >
-                Assign to Course
-              </button>
+              <div className="buttons-container">
+                <button
+                  onClick={() => deleteCompetence(competence.id, 'unique')}
+                  style={{ marginLeft: '10px', padding: '2px 5px' }}
+                >
+                  Delete
+                </button>
+                <button
+                  onClick={() => assignCompetenceToCourse(competence.id, 'unique')}
+                  style={{ marginLeft: '10px', padding: '2px 5px' }}
+                >
+                  Assign to Course
+                </button>
               </div>
             </li>
           ))}
@@ -270,21 +283,21 @@ function CompetencyManagement() {
         <h2>Shared Competences</h2>
         <ul>
           {sharedCompetences.map((competence) => (
-            <li key={competence.id} style={{  marginBottom: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <li key={competence.id} style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               {competence.name}
-              <div className="buttuns-container">
-              <button
-                onClick={() => deleteCompetence(competence.id, 'shared')}
-                style={{ marginLeft: '10px', padding: '2px 5px' }}
-              >
-                Delete
-              </button>
-              <button
-                onClick={() => assignCompetenceToCourse(competence.id, 'shared')}
-                style={{ marginLeft: '10px', padding: '2px 5px' }}
-              >
-                Assign to Course
-              </button>
+              <div className="buttons-container">
+                <button
+                  onClick={() => deleteCompetence(competence.id, 'shared')}
+                  style={{ marginLeft: '10px', padding: '2px 5px' }}
+                >
+                  Delete
+                </button>
+                <button
+                  onClick={() => assignCompetenceToCourse(competence.id, 'shared')}
+                  style={{ marginLeft: '10px', padding: '2px 5px' }}
+                >
+                  Assign to Course
+                </button>
               </div>
             </li>
           ))}
@@ -293,11 +306,17 @@ function CompetencyManagement() {
 
       {/* Buttons for Logout and Redirect to StudentGrades */}
       <div>
-        <button className='butttons' onClick={redirectToStudentGrades} style={{ marginRight: '10px', padding: '5px 10px' }}>
+        <button className='buttons' onClick={redirectToStudentGrades} style={{ marginRight: '10px', padding: '5px 10px' }}>
           Go to Student Grades
         </button>
-        <button className='butttons' onClick={handleLogout} style={{ padding: '5px 10px' }}>
+        <button className='buttons' onClick={handleLogout} style={{ padding: '5px 10px' }}>
           Logout
+        </button>
+        <button
+          onClick={redirectToCoursesCompetencies}
+          style={{ marginRight: '10px', padding: '5px 10px' }}
+        >
+          Go to Courses Competencies
         </button>
       </div>
     </div>
